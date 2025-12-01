@@ -10,4 +10,5 @@ python3 ./scripts/new.py <day_number>
 
 ```zsh
 python3 ./scripts/run.py <day_number>
+python3 ./scripts/run.py <day_number> --base # for base input (examples)
 ```

@@ -17,27 +17,33 @@ def load_day_module(day_str):
     spec.loader.exec_module(module)
     return module
 
-def load_input(day_str):
-    primary = Path(f"input/day-{day_str}.txt")
-    base = Path(f"input/day-{day_str}-base.txt")
+def load_input(day_str, is_base=False):
 
+    if is_base:
+        base = Path(f"input/day-{day_str}-base.txt")
+        if base.exists():
+            return base.read_text().rstrip("\n")
+        else:
+            raise FileNotFoundError(f"No input file found for day {day_str}")
+
+    primary = Path(f"input/day-{day_str}.txt")
     if primary.exists():
         return primary.read_text().rstrip("\n")
-    elif base.exists():
-        return base.read_text().rstrip("\n")
     else:
         raise FileNotFoundError(f"No input file found for day {day_str}")
 
 def main():
     if len(sys.argv) < 2:
-        print("Usage: python run_day.py <day-number>")
+        print("Usage: python run_day.py <day-number> [--base]")
         sys.exit(1)
 
     day = int(sys.argv[1])
     day_str = f"{day:02d}"
 
+    is_base = len(sys.argv) > 2 and (sys.argv[2] == "-b" or sys.argv[2] == "--base")
+
     module = load_day_module(day_str)
-    data = load_input(day_str)
+    data = load_input(day_str, is_base)
 
     part1 = getattr(module, "part1", None)
     part2 = getattr(module, "part2", None)
